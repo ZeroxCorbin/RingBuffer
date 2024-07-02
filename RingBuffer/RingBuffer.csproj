@@ -56,9 +56,9 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ObservableRingBuffer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RingBuffer.cs" />
+    <Compile Include="RingBufferCollection.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
