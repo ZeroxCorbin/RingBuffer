@@ -2,6 +2,9 @@
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Runtime.Remoting.Contexts;
+using System.Threading;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace RingBuffer
 {
@@ -53,7 +56,13 @@ namespace RingBuffer
 
         public int Capacity { get; }
 
-        public RingBufferCollection(int capacity) => Capacity = capacity;
+
+        private static SynchronizationContext uiContext;
+        public RingBufferCollection(int capacity)
+        {
+            uiContext = SynchronizationContext.Current;
+            Capacity = capacity;
+        }
 
         public new void Add(T item)
         {
@@ -68,7 +77,7 @@ namespace RingBuffer
                     }
                     else
                     {
-                        base.InsertItem(Tail, item);
+                       uiContext?.Send(_ => base.InsertItem(Tail, item), null);
                     }
                     Count++;
                 }
@@ -94,7 +103,8 @@ namespace RingBuffer
                 }
 
                 var item = this[Head];
-                base.RemoveAt(Head); // Adjust for the shifted head position
+                uiContext?.Send(_ => base.RemoveAt(Head), null);
+                // Adjust for the shifted head position
                 Count--;
                 Head = (Head + 1) % Capacity;
 
@@ -111,7 +121,7 @@ namespace RingBuffer
         {
             lock (syncRoot)
             {
-                base.SetItem(index, item);
+                uiContext?.Send(_ => base.SetItem(index, item), null);
             }
         }
 
