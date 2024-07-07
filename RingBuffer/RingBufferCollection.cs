@@ -72,13 +72,9 @@ namespace RingBuffer
                 {
                     Tail = (Tail + 1) % Capacity;
                     if (Tail < Count)
-                    {
                         this[Tail] = item;
-                    }
                     else
-                    {
-                       uiContext?.Send(_ => base.InsertItem(Tail, item), null);
-                    }
+                        uiContext?.Send(_ => base.InsertItem(Tail, item), null);
                     Count++;
                 }
                 else
@@ -89,7 +85,7 @@ namespace RingBuffer
                 }
 
                 OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
-                OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+                uiContext?.Send(_ => OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset)), null);
             }
         }
 
@@ -98,9 +94,8 @@ namespace RingBuffer
             lock (syncRoot)
             {
                 if (Count == 0)
-                {
                     throw new InvalidOperationException("The buffer is empty.");
-                }
+                
 
                 var item = this[Head];
                 uiContext?.Send(_ => base.RemoveAt(Head), null);
@@ -109,7 +104,7 @@ namespace RingBuffer
                 Head = (Head + 1) % Capacity;
 
                 OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
-                OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+                uiContext?.Send(_ => OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset)), null);
                 return item;
             }
         }
