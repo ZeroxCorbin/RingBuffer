@@ -2,9 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Runtime.Remoting.Contexts;
 using System.Threading;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace RingBuffer
 {
@@ -56,7 +54,6 @@ namespace RingBuffer
 
         public int Capacity { get; }
 
-
         private static SynchronizationContext uiContext;
         public RingBufferCollection(int capacity)
         {
@@ -95,9 +92,9 @@ namespace RingBuffer
             {
                 if (Count == 0)
                     throw new InvalidOperationException("The buffer is empty.");
-                
 
-                var item = this[Head];
+
+                T item = this[Head];
                 uiContext?.Send(_ => base.RemoveAt(Head), null);
                 // Adjust for the shifted head position
                 Count--;
@@ -120,15 +117,8 @@ namespace RingBuffer
             }
         }
 
-        protected override void OnPropertyChanged(PropertyChangedEventArgs e)
-        {
-            base.OnPropertyChanged(e);
-        }
+        protected override void OnPropertyChanged(PropertyChangedEventArgs e) => base.OnPropertyChanged(e);
 
-        protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
-        {
-            base.OnCollectionChanged(e);
-        }
+        protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e) => base.OnCollectionChanged(e);
     }
-
 }
