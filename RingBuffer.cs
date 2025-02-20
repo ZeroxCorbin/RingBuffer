@@ -1,4 +1,4 @@
-﻿namespace RingBuffer
+﻿namespace RingBuffer.lib
 {
     public class RingBuffer<T>
     {
