@@ -117,6 +117,19 @@ namespace RingBuffer.lib
             }
         }
 
+        public new void Clear()
+        {
+            lock (syncRoot)
+            {
+                base.Clear();
+                Head = 0;
+                Tail = -1;
+                Count = 0;
+            }
+        }
+
+
+
         protected override void OnPropertyChanged(PropertyChangedEventArgs e) => base.OnPropertyChanged(e);
 
         protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e) => base.OnCollectionChanged(e);
