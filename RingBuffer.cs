@@ -84,7 +84,7 @@
 
         public RingBuffer<T> ShallowCopy()
         {
-            RingBuffer<T> buf = (RingBuffer<T>)this.MemberwiseClone();
+            var buf = (RingBuffer<T>)this.MemberwiseClone();
             buf.m_Buffer = (T[])this.m_Buffer.Clone();
             return buf;
         }

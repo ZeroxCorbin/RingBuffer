@@ -94,7 +94,7 @@ namespace RingBuffer.lib
                     throw new InvalidOperationException("The buffer is empty.");
 
 
-                T item = this[Head];
+                var item = this[Head];
                 uiContext?.Send(_ => base.RemoveAt(Head), null);
                 // Adjust for the shifted head position
                 Count--;
